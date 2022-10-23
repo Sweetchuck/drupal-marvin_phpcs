@@ -1,0 +1,66 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method Drupal\\\\marvin_phpcs\\\\Robo\\\\Task\\\\PhpcsConfigFallbackTask\\|Robo\\\\Collection\\\\CollectionBuilder\\:\\:setContainer\\(\\)\\.$#"
+			count: 1
+			path: ../Commands/marvin_phpcs/PhpcsCommandsBase.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\:\\:setWorkingDirectory\\(\\)\\.$#"
+			count: 1
+			path: ../Commands/marvin_phpcs/PhpcsCommandsBase.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Git\\\\Task\\\\GitListStagedFilesTask\\:\\:setDiffFilter\\(\\)\\.$#"
+			count: 1
+			path: ../Commands/marvin_phpcs/PhpcsCommandsBase.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Git\\\\Task\\\\GitReadStagedFilesTask\\:\\:setWorkingDirectory\\(\\)\\.$#"
+			count: 1
+			path: ../Commands/marvin_phpcs/PhpcsCommandsBase.php
+
+		-
+			message: "#^Call to an undefined method Sweetchuck\\\\Robo\\\\Git\\\\Task\\\\GitReadStagedFilesTask\\:\\:deferTaskConfiguration\\(\\)\\.$#"
+			count: 1
+			path: ../Commands/marvin_phpcs/PhpcsCommandsBase.php
+
+		-
+			message: "#^Parameter \\#1 \\$container of method Drupal\\\\marvin\\\\Robo\\\\Task\\\\BaseTask\\:\\:setContainer\\(\\) expects League\\\\Container\\\\DefinitionContainerInterface, Psr\\\\Container\\\\ContainerInterface given\\.$#"
+			count: 1
+			path: ../src/Robo/Task/PhpcsConfigFallbackTask.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: ../tests/src/Helper/DummyOutput.php
+
+		-
+			message: "#^Parameter \\#2 \\$commandFile of static method Robo\\\\Collection\\\\CollectionBuilder\\:\\:create\\(\\) expects Robo\\\\Tasks, null given\\.$#"
+			count: 1
+			path: ../tests/src/Helper/TaskBuilder.php
+
+		-
+			message: "#^Property Drupal\\\\Tests\\\\marvin_phpcs\\\\Unit\\\\Commands\\\\CommandsTestBase\\:\\:\\$commands \\(Drush\\\\Commands\\\\marvin\\\\CommandsBase\\) does not accept object\\.$#"
+			count: 1
+			path: ../tests/src/Unit/Commands/CommandsTestBase.php
+
+		-
+			message: "#^Call to an undefined method Drupal\\\\marvin_phpcs\\\\Robo\\\\Task\\\\PhpcsConfigFallbackTask\\|Robo\\\\Collection\\\\CollectionBuilder\\:\\:original\\(\\)\\.$#"
+			count: 1
+			path: ../tests/src/Unit/Robo/Task/PhpcsConfigFallbackTaskTest.php
+
+		-
+			message: "#^Call to an undefined method Drupal\\\\marvin_phpcs\\\\Robo\\\\Task\\\\PhpcsConfigFallbackTask\\|Robo\\\\Collection\\\\CollectionBuilder\\:\\:setContainer\\(\\)\\.$#"
+			count: 2
+			path: ../tests/src/Unit/Robo/Task/PhpcsConfigFallbackTaskTest.php
+
+		-
+			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionInterface\\:\\:setState\\(\\)\\.$#"
+			count: 1
+			path: ../tests/src/Unit/Robo/Task/PhpcsConfigFallbackTaskTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$commandFile of static method Robo\\\\Collection\\\\CollectionBuilder\\:\\:create\\(\\) expects Robo\\\\Tasks, null given\\.$#"
+			count: 1
+			path: ../tests/src/Unit/Robo/Task/TaskTestBase.php
