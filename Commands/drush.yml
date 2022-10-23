@@ -1,0 +1,23 @@
+marvin:
+  phpcs:
+    ##
+    # Keys are environment names.
+    #
+    # The values come from the "./preset" configuration.
+    #
+    # @var string[]
+    ##
+    defaultPreset:
+      local: 'default'
+      localPreCommit: 'default'
+      watch: 'default'
+      ci: 'default'
+      ciJenkins: 'default'
+    preset:
+      default:
+        failOn: 'warning'
+        standards:
+          Drupal: true
+          DrupalPractice: true
+      ciJenkins:
+        failOn: 'never'
