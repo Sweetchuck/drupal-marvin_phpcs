@@ -5,6 +5,7 @@
     "license": "GPL-3.0-or-later",
     "keywords": [
         "drupal",
+        "drupal-11",
         "drush"
     ],
     "homepage": "https://drupal.org/project/marvin_phpcs",
@@ -18,12 +19,12 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=8.2",
-        "consolidation/robo": "^4.0",
-        "drupal/marvin": "3.x-dev",
-        "sweetchuck/robo-phpcs": "3.x-dev",
+        "php": ">=8.3",
+        "consolidation/robo": "^5.0",
+        "drupal/marvin": "4.x-dev",
+        "sweetchuck/robo-phpcs": "4.x-dev",
         "sweetchuck/utils": "2.x-dev",
-        "symfony/filesystem": "^5.0 || ^6.0"
+        "symfony/filesystem": "^5.0 || ^6.0 || ^7.0"
     },
     "require-dev": {
         "behat/mink": "^1.10",
