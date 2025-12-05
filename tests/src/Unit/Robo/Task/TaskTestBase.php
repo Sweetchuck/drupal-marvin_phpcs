@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\marvin_phpcs\Unit\Robo\Task;
 
 use Drupal\marvin\Utils;
-use Drupal\Tests\marvin_phpcs\Helper\DummyOutput;
-use Drupal\Tests\marvin_phpcs\Helper\TaskBuilder;
+use Drupal\Tests\marvin_phpcs\Traits\DummyOutput;
+use Drupal\Tests\marvin_phpcs\Traits\TaskBuilder;
 use Drush\Config\DrushConfig;
 use Drush\Drush;
 use League\Container\Container as LeagueContainer;

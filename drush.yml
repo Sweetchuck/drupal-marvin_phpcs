@@ -1,0 +1,27 @@
+marvin:
+  phpcs:
+    ##
+    # Keys are custom preset names.
+    #
+    # @var array<string, array<string, mixed>
+    ##
+    presets:
+      default:
+        id: 'default'
+
+        ##
+        # @var array<string, mixed>
+        ##
+        conditions: {  }
+
+        ##
+        # @see \Sweetchuck\Robo\Phpcs\Task\PhpcsLint::setOptions
+        #
+        # Several key-value pairs are automatically hard-coded.
+        # For example, "workingDirectory" or "lintReporters" or any output format-related option.
+        # Recommended to configure as much in in phpcs.xml.dist file as possible.
+        # Available options:
+        # - failOn: 'never' | 'warning' | 'error'
+        ##
+        options:
+          failOn: 'warning'

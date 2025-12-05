@@ -19,18 +19,18 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "consolidation/robo": "^5.0",
-        "drupal/marvin": "4.x-dev",
+        "drupal/marvin": "11.3.x-dev",
         "sweetchuck/robo-phpcs": "4.x-dev",
         "sweetchuck/utils": "2.x-dev",
-        "symfony/filesystem": "^5.0 || ^6.0 || ^7.0"
+        "symfony/filesystem": "^7.0"
     },
     "require-dev": {
         "behat/mink": "^1.10",
         "behat/mink-browserkit-driver": "^2.1",
         "composer/composer": "^2.5",
-        "drush/drush": "^12.1",
+        "drush/drush": "^13.7",
         "mikey179/vfsstream": "^1.6",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.0",
@@ -39,19 +39,11 @@
         "weitzman/drupal-test-traits": "^2.1"
     },
     "suggest": {
-        "drush/drush": "^12.0"
+        "drush/drush": "^13.7"
     },
     "autoload": {
         "psr-4": {
-            "Drush\\Commands\\marvin_phpcs\\": "Commands/marvin_phpcs/",
             "Drupal\\marvin_phpcs\\": "src/"
-        }
-    },
-    "extra": {
-        "drush": {
-            "services": {
-                "drush.services.yml": "*"
-            }
         }
     }
 }

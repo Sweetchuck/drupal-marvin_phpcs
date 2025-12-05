@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\marvin_phpcs\Helper;
+namespace Drupal\Tests\marvin_phpcs\Traits;
 
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -21,7 +21,12 @@ class DummyOutput extends ConsoleOutput {
   /**
    * {@inheritdoc}
    */
-  public function __construct($verbosity = self::VERBOSITY_NORMAL, $decorated = NULL, OutputFormatterInterface $formatter = NULL, bool $isStdError = FALSE) {
+  public function __construct(
+    $verbosity = self::VERBOSITY_NORMAL,
+    ?bool $decorated = NULL,
+    ?OutputFormatterInterface $formatter = NULL,
+    bool $isStdError = FALSE,
+  ) {
     parent::__construct($verbosity, $decorated, $formatter);
     $this->instanceId = static::$instanceCounter++;
 

@@ -6,8 +6,7 @@ namespace Drupal\marvin_phpcs\Robo\Task;
 
 use Drupal\marvin\ComposerInfo;
 use Drupal\marvin\Robo\Task\BaseTask;
-use Drupal\marvin\Utils as MarvinUtils;
-use Psr\Container\ContainerInterface;
+use Drupal\marvin\Utils;
 use Robo\State\StateAwareInterface;
 use Robo\State\StateAwareTrait;
 use Sweetchuck\Utils\Walker\FileSystemExistsWalker;
@@ -17,20 +16,6 @@ class PhpcsConfigFallbackTask extends BaseTask implements StateAwareInterface {
   use StateAwareTrait;
 
   protected string $taskName = 'Marvin - PHP_CodeSniffer config fallback';
-
-  public function setContainer(ContainerInterface $container): static {
-    parent::setContainer($container);
-
-    $pairs = [
-      'marvin.file_system_exists_walker' => [
-        'shared' => FALSE,
-        'class' => FileSystemExistsWalker::class,
-      ],
-    ];
-    MarvinUtils::addDefinitionsToContainer($pairs, $container);
-
-    return $this;
-  }
 
   protected string $workingDirectory = '';
 
@@ -44,6 +29,18 @@ class PhpcsConfigFallbackTask extends BaseTask implements StateAwareInterface {
     return $this;
   }
 
+  protected Utils $utils;
+
+  public function getUtils(): Utils {
+    return $this->utils;
+  }
+
+  public function setUtils(Utils $utils): static {
+    $this->utils = $utils;
+
+    return $this;
+  }
+
   /**
    * @phpstan-param array<string, mixed> $options
    */
@@ -52,6 +49,10 @@ class PhpcsConfigFallbackTask extends BaseTask implements StateAwareInterface {
 
     if (array_key_exists('workingDirectory', $options)) {
       $this->setWorkingDirectory($options['workingDirectory']);
+    }
+
+    if (array_key_exists('utils', $options)) {
+      $this->setUtils($options['utils']);
     }
 
     return $this;
@@ -107,7 +108,7 @@ class PhpcsConfigFallbackTask extends BaseTask implements StateAwareInterface {
         $filePaths['files']['src/'] = TRUE;
         $filePaths['files']['tests/'] = TRUE;
         $filePaths['files'] += array_fill_keys(
-          MarvinUtils::getDirectDescendantDrupalPhpFiles($workingDirectory),
+          $this->utils->getDirectDescendantDrupalPhpFiles($workingDirectory),
           TRUE
         );
         break;
@@ -119,13 +120,13 @@ class PhpcsConfigFallbackTask extends BaseTask implements StateAwareInterface {
         $filePaths['files']['modules/custom/'] = TRUE;
         $filePaths['files']['themes/custom/'] = TRUE;
         $filePaths['files'] += array_fill_keys(
-          MarvinUtils::getDirectDescendantDrupalPhpFiles($workingDirectory),
+          $this->utils->getDirectDescendantDrupalPhpFiles($workingDirectory),
           TRUE
         );
         break;
     }
 
-    $walker = $this->getContainer()->get('marvin.file_system_exists_walker');
+    $walker = new FileSystemExistsWalker();
     $walker->setBaseDir($workingDirectory);
     array_walk($filePaths['files'], $walker);
 

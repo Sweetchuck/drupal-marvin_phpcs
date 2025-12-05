@@ -2,50 +2,69 @@
 
 declare(strict_types=1);
 
-namespace Drush\Commands\marvin_phpcs;
+namespace Drupal\marvin_phpcs;
 
-use Drupal\marvin\Utils as MarvinUtils;
+use Drupal\marvin\LintCommandTrait;
 use Drupal\marvin_phpcs\Robo\PhpcsConfigFallbackTaskLoader;
-use Drush\Commands\marvin\LintCommandsBase;
 use Robo\Contract\TaskInterface;
 use Sweetchuck\Robo\Git\GitTaskLoader;
 use Sweetchuck\Robo\Phpcs\PhpcsTaskLoader;
 use Symfony\Component\Filesystem\Path;
 
-class PhpcsCommandsBase extends LintCommandsBase {
+/**
+ * @property \Drupal\marvin\Utils $utils
+ * @property \Drush\Config\DrushConfig $drushConfig
+ */
+trait PhpcsCommandTrait {
 
+  use LintCommandTrait;
   use PhpcsTaskLoader;
   use PhpcsConfigFallbackTaskLoader;
   use GitTaskLoader;
 
-  protected static string $classKeyPrefix = 'marvin.phpcs';
-
-  protected string $customEventNamePrefix = 'marvin:phpcs';
+  /**
+   * @param ?\Robo\Symfony\ConsoleIO $io
+   *
+   * @return \Robo\Collection\CollectionBuilder
+   */
+  abstract protected function collectionBuilder($io = NULL);
 
   /**
    * @return \Robo\Contract\TaskInterface|\Robo\Collection\CollectionBuilder
    */
-  protected function getTaskLintPhpcsExtension(string $workingDirectory): TaskInterface {
-    $config = $this->getConfig();
-
-    $gitHook = $config->get('marvin.gitHook');
+  protected function getTaskLintPhpcsExtension(
+    string $workingDirectory,
+    string $composerBinDir,
+    string $reportsDir,
+    ?string $gitHookName,
+  ): TaskInterface {
     $phpcsXml = $this->getPhpcsConfigurationFileName($workingDirectory);
 
-    $presetName = $this->getPresetNameByEnvironmentVariant();
-    $options = $this->getConfigValue("preset.$presetName", []);
+    $conditionContext = $this->utils->getConditionContext($this->drushConfig);
+
+    $presets = $this->drushConfig->get('marvin.phpcs.presets');
+    $presetName = $this->utils->getFirstByConditions($presets, $conditionContext);
+    $preset = $presets[$presetName] ?? ['options' => []];
+
+    $options = $preset['options'] ?? [];
     if ($phpcsXml) {
       unset($options['standards']);
     }
 
-    $options['phpcsExecutable'] = Path::join(
-      $this->makeRelativePathToComposerBinDir($workingDirectory),
-      'phpcs',
+    $backToBinDir = $this->utils->makeRelativePathToComposerBinDir(
+      $workingDirectory,
+      $this->utils->getProjectRootDir($this->drushConfig),
+      $composerBinDir,
     );
+
+    $options['phpcsExecutable'] = Path::join($backToBinDir, 'phpcs');
     $options['workingDirectory'] = $workingDirectory;
     $options += ['lintReporters' => []];
-    $options['lintReporters'] += $this->getLintReporters();
+    $options['lintReporters'] += $this->getLintReporters([
+      'reportsDir' => $reportsDir,
+    ]);
 
-    if ($gitHook === 'pre-commit') {
+    if ($gitHookName === 'pre-commit') {
       return $this
         ->collectionBuilder()
         ->addTask($this
@@ -57,7 +76,7 @@ class PhpcsCommandsBase extends LintCommandsBase {
           ->taskGitListStagedFiles()
           ->setDiffFilter(['d' => FALSE])
           ->setWorkingDirectory($workingDirectory)
-          ->setPaths(MarvinUtils::drupalPhpExtensionPatterns()))
+          ->setPaths($this->utils->drupalPhpExtensionPatterns()))
         ->addTask($this
           ->taskGitReadStagedFiles()
           ->setWorkingDirectory($workingDirectory)
@@ -74,7 +93,7 @@ class PhpcsCommandsBase extends LintCommandsBase {
         ->collectionBuilder()
         ->addTask($this
           ->taskMarvinPhpcsConfigFallback()
-          ->setContainer($this->getContainer())
+          ->setUtils($this->utils)
           ->setWorkingDirectory($workingDirectory)
           ->setAssetNamePrefix('phpcsXml.'))
         ->addTask($this
@@ -105,31 +124,14 @@ class PhpcsCommandsBase extends LintCommandsBase {
   }
 
   /**
-   * @return string[]
+   * @return array<string>
    */
   protected function getPhpcsExtensions(): array {
-    return MarvinUtils::prefixSuffixItems(
-      array_keys(MarvinUtils::$drupalPhpExtensions, TRUE),
+    return $this->utils->prefixSuffixItems(
+      array_keys($this->utils->drupalPhpExtensions, TRUE),
       '',
       '/PHP',
     );
-  }
-
-  /**
-   * @deprecated Use dealerdirect/phpcodesniffer-composer-installer.
-   */
-  protected function getTaskPhpcsConfigSetInstalledPaths(string $workingDirectory): TaskInterface {
-    $composerInfo = $this->getComposerInfo();
-    $binDir = $composerInfo['config']['bin-dir'];
-    $vendorDir = $composerInfo['config']['vendor-dir'];
-    $vendorDirAbs = Path::makeAbsolute($vendorDir, $workingDirectory);
-    $cmdPattern = '%s --config-set installed_paths %s';
-    $cmdArgs = [
-      escapeshellcmd("$binDir/phpcs"),
-      escapeshellarg("$vendorDirAbs/drupal/coder/coder_sniffer"),
-    ];
-
-    return $this->taskExec(vsprintf($cmdPattern, $cmdArgs));
   }
 
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\marvin_phpcs\Helper;
+namespace Drupal\Tests\marvin_phpcs\Traits;
 
 use Consolidation\AnnotatedCommand\Output\OutputAwareInterface;
 use Consolidation\Config\ConfigAwareInterface;

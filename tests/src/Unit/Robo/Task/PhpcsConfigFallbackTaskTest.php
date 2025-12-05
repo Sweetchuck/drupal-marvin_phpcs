@@ -176,7 +176,7 @@ class PhpcsConfigFallbackTaskTest extends TaskTestBase {
       );
     }
 
-    /** @var \Drupal\Tests\marvin_phpcs\Helper\DummyOutput $stdOutput */
+    /** @var \Drupal\Tests\marvin_phpcs\Traits\DummyOutput $stdOutput */
     $stdOutput = $this->container->get('output');
     if (array_key_exists('stdOutput', $expected)) {
       static::assertSame(
@@ -235,7 +235,7 @@ class PhpcsConfigFallbackTaskTest extends TaskTestBase {
     static::assertSame($stateData['my.files'], $state['my.files']);
     static::assertSame($stateData['my.exclude-patterns'], $state['my.exclude-patterns']);
 
-    /** @var \Drupal\Tests\marvin_phpcs\Helper\DummyOutput $stdOutput */
+    /** @var \Drupal\Tests\marvin_phpcs\Traits\DummyOutput $stdOutput */
     $stdOutput = $this->container->get('output');
     if (array_key_exists('stdOutput', $expected)) {
       static::assertSame(
